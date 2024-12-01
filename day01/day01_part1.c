@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 static int compare(const void *nb_one, const void *nb_two) {
     return (*(int*)nb_one - *(int*)nb_two);
@@ -55,16 +56,17 @@ static void read_input(const char *input) {
     free(line);
     sort_lists(list_one, list_two, num_lines);
     int sum = calculate_distance_sum(list_one, list_two, num_lines);
-    printf("Total distance = %d\n", sum);
+    printf("%d\n", sum);
     free(list_one);
     free(list_two);
 }
 
 int main(int ac, const char *av[]) {
-    if (ac != 2) {
-        fprintf(stderr, "Usage: %s input.txt\n", av[0]);
-        return 1;
-    }
-    read_input(av[1]);
-    return 0;
+  if (ac != 2) {
+    fprintf(stderr, "Usage: %s input.txt\n", av[0]);
+    return 1;
+  }
+  read_input(av[1]);
+  return 0;
 }
+
