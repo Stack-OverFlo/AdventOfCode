@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 EXEC = day01
-SRC = day01.c
+SRC = day01_part01.c
 OBJ =	$(SRC:.c=.o)
 
 all:	$(EXEC)

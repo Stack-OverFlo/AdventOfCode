@@ -13,16 +13,18 @@ static void split_into_lists(const char *line, int *list_one, int *list_two) {
     }
 }
 
-static void sort_lists_and_calculate_sum(int *list_one, int *list_two, int num_lines) {
+static void sort_lists(int *list_one, int *list_two, int num_lines) {
     qsort(list_one, num_lines, sizeof(int), compare);
     qsort(list_two, num_lines, sizeof(int), compare);
+}
+
+static int calculate_distance_sum(int *list_one, int *list_two, int num_lines) {
     int sum = 0;
     for (int i = 0; i < num_lines; i++) {
         sum += abs(list_one[i] - list_two[i]);
     }
-    printf("Total distance = %d\n", sum);
+    return sum;
 }
-
 static void read_input(const char *input) {
     FILE *stream = fopen(input, "r");
     if (!stream) {
@@ -51,7 +53,9 @@ static void read_input(const char *input) {
     }
     fclose(stream);
     free(line);
-    sort_lists_and_calculate_sum(list_one, list_two, num_lines);
+    sort_lists(list_one, list_two, num_lines);
+    int sum = calculate_distance_sum(list_one, list_two, num_lines);
+    printf("Total distance = %d\n", sum);
     free(list_one);
     free(list_two);
 }
