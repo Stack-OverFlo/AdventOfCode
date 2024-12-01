@@ -1,0 +1,21 @@
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
+EXEC = day01
+SRC = day01.c
+
+OBJ =	$(SRC:.c=.o)
+
+all:	$(EXEC)
+
+day01:	$(OBJ)
+	$(CC) -o day01 $(SRC)
+%.o = %.c
+	$(CC) -o
+
+clean:
+	rm -rf *.o
+
+fclean: $(clean)
+	rm -rf $(EXEC)
+
+.phony: all clean fclean all
