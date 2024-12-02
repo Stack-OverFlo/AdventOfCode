@@ -68,7 +68,7 @@ void read_file(const std::string &file) {
     std::ifstream input(file);
     if (!input.is_open()) {
         std::cerr << "Error: Failed to open file: " << file << "\n";
-        perror("Bad inputfile");
+        perror("Bad input file");
         return;
     }
     while (std::getline(input, line)) {
@@ -81,7 +81,7 @@ void read_file(const std::string &file) {
 
 int main(int ac, const char *av[]) {
   if (ac != 2) {
-    std::cerr << "Usage: ./day02_part1 <input_file>\n";
+    std::cerr << "Usage: ./day02_part2 <input_file>\n";
     return 1;
   }
   read_file(av[1]);
