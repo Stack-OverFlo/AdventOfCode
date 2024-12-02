@@ -68,7 +68,7 @@ void read_file(const std::string &file) {
     std::ifstream input(file);
     if (!input.is_open()) {
         std::cerr << "Error: Failed to open file: " << file << "\n";
-        perror("Reason");
+        perror("Bad inputfile");
         return;
     }
     while (std::getline(input, line)) {
@@ -76,6 +76,7 @@ void read_file(const std::string &file) {
         safe_path += get_level(line);
     }
     std::cout << safe_path << std::endl;
+    input.close();
 }
 
 int main(int ac, const char *av[]) {
