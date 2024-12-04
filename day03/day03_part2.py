@@ -1,7 +1,6 @@
 import sys
 
 def do_op(operand1, operand2):
-    print(f"doing {operand1} * {operand2} =" + str(operand1*operand2))
     return operand1 * operand2
 
 def check_mul(token):
@@ -24,9 +23,10 @@ def check_mul(token):
     return operand1, operand2
 
 def handle_broken_mul(token, start, end):
-    if start > end and token.rfind("mul(") < token.rfind(")"):
+    if (start > end and token.rfind("mul(") < token.rfind(")")):
         return token[token.rfind("mul("):token.rfind(")") + 1]
-    return ""
+    else:
+        return ""
 
 def check_double_mul(token):
     count_start = token.count("mul(")
@@ -50,46 +50,45 @@ def extract_numbers(token):
                 return None, None
     return None, None
 
-def find_all_mul(lines):                                                                                      
-    total = 0                                                                                                 
-    do_enabled = True
-    for line in lines:                                                                                        
-        start = 0                                                                                             
-        while start < len(line):
-            do_pos = line.find("do()", start)
-            dont_pos = line.find("don't()", start)
-            if do_pos != -1 and (dont_pos == -1 or do_pos > dont_pos):
-                do_enabled = True
-                start = do_pos + len("do()")
-                print("do()")
-            elif dont_pos != -1 and (do_pos == -1 or dont_pos > do_pos):                                      
-                do_enabled = False
-                start = dont_pos + len("don't()")
-                print("dont()")
-            token_pos_start = line.find("mul(", start)                                                        
-            if token_pos_start == -1:
-                break                                                                                         
-            token_pos_end = line.find(")", token_pos_start)                                                   
-            if token_pos_end == -1:
-                break                                                                                         
-            token = line[token_pos_start:token_pos_end + 1]
-            start = token_pos_end + 1
-            token = check_double_mul(token)
-            print(f"token {token}")
-            operands = check_mul(token)
-            if operands is None:
-                continue                                                                                      
-            op1, op2 = operands
-            if do_enabled:                                                                                    
-                result = do_op(op1, op2)
-                total += result 
+def find_all_mul(buffer):                                                                         
+    total = 0
+    start = 0                                                  
+    buffer_length = len(buffer)
+    
+    while True:
+        mul_pos = buffer.find("mul(", start)                                            
+        if mul_pos == -1:                                                                         
+            break                                                                                 
+        process_mul = True
+        token_start = mul_pos                                                                     
+        token_end = buffer.find(")", token_start)
+        do_pos = buffer.rfind("do()", 0, mul_pos)
+        dont_pos = buffer.rfind("don't()", 0, mul_pos)
+        if do_pos > dont_pos:                                                                    
+            process_mul = True
+        elif dont_pos > do_pos:                                                                   
+            process_mul = False
+        else:                                                                                     
+            process_mul = True
+        token = buffer[token_start:token_end + 1]                                                 
+        start = token_end + 1                                                                     
+        if process_mul:                                                                           
+            token = check_double_mul(token)                                                       
+            operands = check_mul(token)                                                           
+            if operands is None:                                                                  
+                continue                                                                          
+            op1, op2 = operands                                                                   
+            result = do_op(op1, op2)                                                              
+            total += result                                                                       
+        else:                                                                                     
+            pass                                                                                  
     print(f"Total: {total}")
     return total
 
-def read_input(input):
-    with open(input) as file:
-        lines = file.readlines()
-        find_all_mul(lines)
+def read_input(input):                                                                            
+    with open(input, 'r') as file:                                                                
+        buffer = file.read()                                                                      
+    find_all_mul(buffer)
 
 def main():
     if len(sys.argv) != 2:
